@@ -4,8 +4,9 @@ from wtforms import StringField, IntegerField, SubmitField
 from wtforms.validators import DataRequired, Length, NumberRange
 
 app = Flask(__name__)
-app.config['SECRET_KEY'] = 'your_secret_key'  # Replace with a secret key for security.
+app.config['SECRET_KEY'] = 'your_secret_key'
 
+# Define data_store in the global scope
 data_store = {
     'example_id': {
         'name': 'Example Name',
@@ -21,9 +22,11 @@ class MyForm(FlaskForm):
 # Routes for handling form submissions
 @app.route('/add_data', methods=['POST'])
 def add_data():
+    # Access data_store from the global scope
+    global data_store
+
     form = MyForm()
     if form.validate_on_submit():
-        # Handle form submission, validate inputs, etc.
         new_id = len(data_store) + 1
         data_store[new_id] = {'name': form.name.data, 'value': form.value.data}
         return f'Data submitted successfully! New ID: {new_id}'
@@ -32,7 +35,7 @@ def add_data():
 # New route for the root URL
 @app.route('/')
 def home():
-    return 'Karibuni!'
+    return render_template('form_template.html', form=MyForm())
 
 if __name__ == '__main__':
     app.run(debug=True)
