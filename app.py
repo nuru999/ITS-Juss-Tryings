@@ -6,7 +6,6 @@ from wtforms.validators import DataRequired, Length, NumberRange
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'your_secret_key'  # Replace with a secret key for security.
 
-#
 data_store = {
     'example_id': {
         'name': 'Example Name',
@@ -29,6 +28,11 @@ def add_data():
         data_store[new_id] = {'name': form.name.data, 'value': form.value.data}
         return f'Data submitted successfully! New ID: {new_id}'
     return 'Form validation failed. Please check your inputs.'
+
+# New route for the root URL
+@app.route('/')
+def home():
+    return 'Hello, Flask!'
 
 if __name__ == '__main__':
     app.run(debug=True)
